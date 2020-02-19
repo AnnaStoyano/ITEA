@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul id='list'>
+        <li>Example1</li>
+        <li>Example2</li>
+        <li>Example3</li>
+        <li>Example4</li>
+    </ul>
+    <form>
+        <label>Введите текст нового элемента  <input type="text" name="input" size="30" ></label>
+        <input type="button" value="Добавить в конец" onclick="appendToEnd(this.form)" />
+        <input type="button" value="Добавить в начало" onclick="appendToStart(this.form)" /><br><br>
+        <input type='button' value='Выбрать первый элемент' size=40 onclick="selectFirstItem(this.form)">
+        <input type='button' value='Выбрать последний элемент' size=40 onclick="selectLastItem(this.form)">
+        <input type='button' value='Выбрать следующий элемент' size=40 onclick="selectNextItem(this.form)">
+        <input type='button' value='Выбрать предыдущий элемент' size=40 onclick="selectPrevItem(this.form)">
+        <input type='button' value='Сбросить' size=40 onclick="removeSelectItem(this.form)"><br><br>
+        <input type='button' value='Удалить последний' size=40 onclick="removeLastItem(this.form)">
+    </form>
+    <script src="script.js"></script>
+</body>
+</html>
