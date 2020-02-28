@@ -1,75 +1,123 @@
+let list = document.getElementById('list');
+
+
+function createNewItem(tagName,value){
+    let newItem = document.createElement(tagName);
+    newItem.innerHTML = value;
+    return newItem;
+}
+
+function cssStyleForSelectElement(selectElement,state){
+    if(state){
+        selectElement.style.color = 'green';
+        selectElement.style.fontSize='20px';
+    }
+    else {
+        selectElement.style.color = 'black';
+        selectElement.style.fontSize='16px';
+    }
+}
+
+function isSelected(element){
+    if(element.style.color === 'green')
+        return true;
+    else{
+        return false;}
+}
 
  function appendToEnd(form) {
     if(form.input.name){
-        let newItem = document.createElement('li');
-        newItem.innerHTML=form.input.value;
-        document.getElementById('list').appendChild(newItem);
+        let itemToInsert = createNewItem('li',form.input.value);
+        list.appendChild(itemToInsert);
     }
 }
 
 function appendToStart(form){
     if(form.input.value){
-        let newItem = document.createElement('li');
-        newItem.innerHTML=form.input.value;
-        let firstItem = document.getElementById('list').firstElementChild;
-        document.getElementById('list').insertBefore(newItem,firstItem);
+        let itemToInsert = createNewItem('li',form.input.value);
+        let firstItem = list.firstElementChild;
+        list.insertBefore(itemToInsert,firstItem);
     }
 }
 
 function selectFirstItem(form){
-   let firstItem=document.getElementById('list').firstElementChild;
-   firstItem.style.color='green';
-   firstItem.style.fontSize='20px';
+   let firstItem=list.firstElementChild;
+   cssStyleForSelectElement(firstItem,true);
    
 }
 
 function selectLastItem(form){
-    let firstItem=document.getElementById('list').lastElementChild;
-    firstItem.style.color ='green';
-    firstItem.style.fontSize ='20px';
+    let lastItem=list.lastElementChild;
+    cssStyleForSelectElement(lastItem,true);
     
 }
 
-function selectNextItem(form){
+function SelectItemLoop(fromStart){
     let current,next;
-    let elements= document.getElementById('list').children;
-    for(let i=0;i<elements.length;i++){
-        current=elements[i];
-        if(i!=elements.length-1){
-            next=elements[i+1];
+    let lastElementCount,firstElementCount;
+    //debugger;
+    let helpFunction = function(fromStart,i){
+        if(fromStart){
+            if(i < list.childElementCount)
+                return true;
         }
-        else{
-            next=elements[0];
-        }    
-        if(current.style.color == 'green' && next.style.color != 'green'){
-            next.style.color = 'green';
-            next.style.fontSize ='20px';
-            break;
+        else {
+            if(i >= 0)
+                return true;
         }
+    }
+
+    let i;
+    if(fromStart){
+        firstElementCount = i = 0;
+        lastElementCount = list.childElementCount-1;
+    }
+    else{
+        firstElementCount = i = list.childElementCount-1;
+        lastElementCount = 0;
+        
+    }
+    while(helpFunction(fromStart,i)){
+        if(isSelected(list.children[i])){
+            current = list.children[i];
+            cssStyleForSelectElement(current,false);
+            if(i=== lastElementCount)
+                next = list.children[firstElementCount];
+            else{
+                if(fromStart)
+                    next = list.children[i+1];
+                else 
+                    next = list.children[i-1];
+            }
+            cssStyleForSelectElement(next,true);
+            return current;
+        }
+        if(fromStart)
+            i++;
+        else 
+            i--;
     }
 }
 
+
+function selectNextItem(form){
+    let selectElement = SelectItemLoop(true);
+    if(!selectElement){
+        selectFirstItem();
+    }
+}
+
+
+
 function selectPrevItem(form){
-    let current,prev;
-    let elements= document.getElementById('list').children;
-    for(let i=0;i<elements.length;i++){
-        current=elements[i];
-        if(i!=0){
-            prev=elements[i-1];
-        }
-        else{
-            prev=elements[elements.length-1];
-        }    
-        if(current.style.color == 'green' && prev.style.color != 'green'){
-            prev.style.color = 'green';
-            prev.style.fontSize ='20px';
-            break;
-        }
+    let selectElement = SelectItemLoop(false);
+    if(!selectElement){
+        selectLastItem();
     }
 }
 
 function removeSelectItem(form){
-    let elements= document.getElementById('list').children;
+    let elements= list.children;
     for(let i=elements.length-1;i>=0;i--){
         if(elements[i].style.color != 'black'){
             elements[i].style.color = 'black';
@@ -79,8 +127,7 @@ function removeSelectItem(form){
 }
 
 function removeLastItem(form){
-    let elements= document.getElementById('list');
-    if(elements.childElementCount>0){
-        elements.removeChild(elements.lastElementChild);
+    if(list.childElementCount>0){
+        list.removeChild(list.lastElementChild);
     }
 }
